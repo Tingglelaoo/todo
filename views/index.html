@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="zh-CN">
+<html lang="zh-CN" ng-app="todo">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport"content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;"/>
@@ -8,26 +8,33 @@
     <!--S 本地样式，开发请删除-->
     <link rel="stylesheet"href="./stylesheets/base.s.css"/>
     <link rel="stylesheet"href="./stylesheets/index.s.css"/>
+    <script type="text/javascript" src="./javascripts/angular.min.js"></script>
+    <script type="text/javascript" src="./javascripts/angular-resource.min.js"></script>
+    <script type="text/javascript" src="./javascripts/angular-messages.min.js"></script>
+    <script type="text/javascript" src="./javascripts/controllers.js"></script>
     <!--E 本地样式-->
 
     <title>TODO</title>
 </head>
 <body>
     <h1 class="title">TODO</h1>
-    <div class="todo_board">
-        <div class="todo_input" >
-            <input type="text" placeholder="准备做...">
+    <div class="todo_board" ng-controller="todoBoardCtrl" >
+        <div class="todo_input" ng-Keypress="sendData($event)" >
+            <input type="text" placeholder="准备做..." ng-model="todoInput">
         </div>
-        <ul class="todo_list">
-            <li>
-                <div class="todo done" style="-webkit-transform:translate(-40px,0);transform:translate(-40px,0);"> <i class="status hell"></i>
-                    <p class="tit">标题，需要限制字数
-                        <small class="time">yyyy-HH-mm</small>
+        <ul class="todo_list" ng-controller="todoListCtrl">
+            <li ng-repeat="todo in todos">
+                <div class="todo" ng-class="{'done':todo.isDone}">
+                    <!-- style="-webkit-transform:translate(-40px,0);transform:translate(-40px,0);" -->
+                <i class="status {{todo.status}}" ng-click="tickStatus()"></i>
+                    <p class="tit" ng-click="popDetail()">{{todo.title}}
+                        <small class="time">{{ todo.time | date: 'yyyy-MM-dd HH:mm:ss'}}</small>
                     </p>
-                    <div class="btn_del" style="display: block;"></div>
+                    <!-- style="display: block;" -->
+                    <div class="btn_del" ></div>
                 </div>
             </li>
-            <li>
+            <!-- <li>
                 <div class="todo"> <i class="status hard"></i>
                     <p class="tit">标题，需要限制字数
                         <small class="time">yyyy-HH-mm</small>
@@ -50,20 +57,22 @@
                     </p>
                     <div class="btn_del"></div>
                 </div>
-            </li>
+            </li> -->
         </ul>
     </div>
     <div class="mod_alert_layer">
-        <div class="todo_detail_board">
+        <div class="todo_detail_board" ng-controller="todoDetailCtrl">
+        <span class="close" ng-click="closeDetail()"></span>
         <div class="detail">
             <p class="time">yyyy-HHH-mm</p>
-            <div class="desc">
-                今天需要完成什么事情
-                今天需要完成什么事情
-                今天需要完成什么事情
-                今天需要完成什么事情
-            </div>
+            <textarea class="desc" >
+            今天需要完成什么事情
+            今天需要完成什么事情
+            今天需要完成什么事情
+            </textarea>
         </div>
+        <div class="commit" ng-click="commitDatail()">确认</div>
+        <div class="revoke" ng-click="closeDetail()">取消</div>
     </div>
     </div>
 </body>

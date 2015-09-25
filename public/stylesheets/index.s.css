@@ -18,7 +18,7 @@
   -webkit-appearance: none;
   -webkit-border-radius: 0; }
 
-.todo_input:after, .todo:after, .todo .btn_del:after {
+.todo_input:after, .todo:after {
   content: '';
   height: 0px;
   display: block;
@@ -40,7 +40,7 @@
   pointer-events: none; }
 
 @media only screen and (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 120dpi), (-ms-high-contrast: active), (-ms-high-contrast: none) {
-  .todo_input:after, .todo:after, .todo .btn_del:after {
+  .todo_input:after, .todo:after {
     -webkit-transform: scaleY(0.5);
     -webkit-transform-origin: 50% 100%; }
 
@@ -51,8 +51,7 @@
     right: -100%; } }
 @media only screen and (-webkit-min-device-pixel-ratio: 3) {
   .todo_input:after,
-  .todo:after,
-  .todo .btn_del:after {
+  .todo:after {
     -webkit-transform: scaleY(0.333); }
 
   .todo .status:after {
@@ -62,8 +61,7 @@
     right: -200%; } }
 @media only screen and (-webkit-device-pixel-ratio: 1.5) {
   .todo_input:after,
-  .todo:after,
-  .todo .btn_del:after {
+  .todo:after {
     -webkit-transform: scaleY(0.666); }
 
   .todo .status:after {
@@ -105,7 +103,7 @@ body {
 
 .todo {
   position: relative;
-  padding: 0 10px 0  25px;
+  padding: 0px 35px 0 25px;
   line-height: 50px; }
   .todo:after {
     border-color: #f2f2f2; }
@@ -149,13 +147,13 @@ body {
       color: #80adf4;
       float: right; }
   .todo .btn_del {
-    display: none;
     position: absolute;
-    top: 0;
-    right: -50px;
-    width: 50px;
-    height: 50px;
-    background: rgba(228, 57, 60, 0.9); }
+    top: 50%;
+    right: 0;
+    -webkit-transform: translate(0, -50%);
+    transform: translate(0, -50%);
+    width: 25px;
+    height: 25px; }
     .todo .btn_del:before {
       position: absolute;
       content: '\2715';
@@ -163,10 +161,11 @@ body {
       left: 50%;
       -webkit-transform: translate(-50%, -50%);
       transform: translate(-50%, -50%);
-      width: 50px;
-      height: 50px;
-      color: #fff;
-      font-size: 50px;
+      width: 25px;
+      height: 25px;
+      line-height: 25px;
+      color: rgba(228, 57, 60, 0.9);
+      font-size: 20px;
       text-align: center; }
 
 /* todo layer
@@ -197,6 +196,36 @@ body {
   .todo_detail_board.fixed {
     top: 50%;
     z-index: 80; }
+  .todo_detail_board .close {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 20px;
+    height: 20px; }
+    .todo_detail_board .close:before {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -webkit-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+      content: '\2716';
+      color: #fff;
+      width: 20px;
+      height: 20px;
+      font-size: 15px;
+      line-height: 20px;
+      text-align: center;
+      background-color: #e4393c;
+      -webkit-border-radius: 20px;
+      border-radius: 20px; }
+  .todo_detail_board .commit {
+    float: right;
+    margin: 10px;
+    color: #e4393c; }
+  .todo_detail_board .revoke {
+    float: right;
+    margin: 10px;
+    color: #9cd44c; }
   .todo_detail_board .detail {
     color: #999; }
     .todo_detail_board .detail .time {
@@ -206,7 +235,14 @@ body {
     .todo_detail_board .detail .desc {
       width: 100%;
       padding: 10px;
-      min-height: 200px; }
+      max-height: 200px; }
     .todo_detail_board .detail textarea {
       resize: none;
-      border: 1px solid #ddd; }
+      width: 100%;
+      height: 180px;
+      overflow: hidden;
+      border-top: none;
+      border-bottom: 1px dotted #999;
+      border-left: none;
+      border-right: none;
+      color: #999; }

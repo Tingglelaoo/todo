@@ -168,6 +168,15 @@ $color_blue: #80adf4;
         top: 50%;
         z-index: 80;
     }
+    .close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        &:before {
+            position: absolute;
+            content:'\2715';
+        }
+    }
     .detail {
         color: #999;
         .time {
