@@ -1,10 +1,6 @@
 var express = require('express');
 var router = express.Router();
+/* 连接数据库 */
 var model = require('./model');
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'TODO' });
-});
-
-
+model(router);
 module.exports = router;

@@ -1,5 +1,4 @@
-
-var todoModule = angular.module('todo',['ngResource','ngMessages']);
+var todoModule = angular.module('todo',[]);
 
 
 
@@ -37,9 +36,24 @@ var todos = [
     title: 'hell world2'
 }
 ];
-todoModule.controller('todoListCtrl',function($scope){
-    $scope.todos = todos;
-    $scope.popDetail = function(){
+
+
+todoModule.factory('DataShareService',function(){
+    return {
+        _id: 0
+    }
+})
+
+todoModule.controller('todoListCtrl',function($scope,$http,DataShareService){
+    // 获取数据
+    $http.get('/todos').success(function(data){
+        $scope.todos = data;
+    });
+    // 暴露函数
+    $scope.popDetail = function(todo){
+
+        DataShareService._id = todo._id;
+
         document.querySelectorAll('.mod_alert_layer')[0].style.display= "block";
         setTimeout(function(){document.querySelectorAll('.todo_detail_board')[0].classList.add('fixed');},100);
     }
@@ -51,7 +65,16 @@ todoModule.controller('todoListCtrl',function($scope){
         this.todo.isDone = !this.todo.isDone;
     }
 });
-todoModule.controller('todoDetailCtrl',function($scope){
+todoModule.controller('todoDetailCtrl',function($scope,$http,DataShareService){
+
+
+    console.log(DataShareService._id);
+    // 获取数据
+    $http.get('/todo/'+ DataShareService._id).success(function(data){
+        $scope.todo = data;
+    });
+
+
     function close(){
         document.querySelectorAll('.todo_detail_board')[0].classList.remove('fixed');
         setTimeout(function(){
@@ -64,7 +87,6 @@ todoModule.controller('todoDetailCtrl',function($scope){
     $scope.commitDatail = function(){
         close();
     }
-    $scope.editable = true;
 });
 todoModule.controller('todoBoardCtrl',function($scope){
     $scope.sendData = function($event){
