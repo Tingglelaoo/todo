@@ -25,53 +25,27 @@
         <ul class="todo_list" ng-controller="todoListCtrl">
             <li ng-repeat="todo in todos">
                 <div class="todo" ng-class="{'done':todo.isDone}">
-                    <!-- style="-webkit-transform:translate(-40px,0);transform:translate(-40px,0);" -->
                 <i class="status {{todo.status}}" ng-click="tickStatus()"></i>
                     <p class="tit" ng-click="popDetail(todo)">{{todo.title}}
                         <small class="time">{{ todo.time | date: 'yyyy-MM-dd HH:mm:ss'}}</small>
                     </p>
-                    <!-- style="display: block;" -->
                     <div class="btn_del" ></div>
                 </div>
             </li>
-            <!-- <li>
-                <div class="todo"> <i class="status hard"></i>
-                    <p class="tit">标题，需要限制字数
-                        <small class="time">yyyy-HH-mm</small>
-                    </p>
-                    <div class="btn_del"></div>
-                </div>
-            </li>
-            <li>
-                <div class="todo"> <i class="status easy"></i>
-                    <p class="tit">标题，需要限制字数
-                        <small class="time">yyyy-HH-mm</small>
-                    </p>
-                    <div class="btn_del"></div>
-                </div>
-            </li>
-             <li>
-                <div class="todo done"> <i class="status"></i>
-                    <p class="tit">标题，需要限制字数
-                        <small class="time">yyyy-HH-mm</small>
-                    </p>
-                    <div class="btn_del"></div>
-                </div>
-            </li> -->
         </ul>
-    </div>
-    <div class="mod_alert_layer">
-        <div class="todo_detail_board" ng-controller="todoDetailCtrl">
-        <span class="close" ng-click="closeDetail()"></span>
-        <div class="detail">
-            <p class="time">{{ todo.time | date: 'yyyy-MM-dd HH:mm:ss'}}</p>
-            <textarea class="desc" >
-            {{todo.desc}}
-            </textarea>
+        <div class="mod_alert_layer">
+            <div class="todo_detail_board" ng-controller="todoDetailCtrl">
+            <span class="close" ng-click="closeDetail()"></span>
+            <div class="detail">
+                <p class="time">{{ todo.time | date: 'yyyy-MM-dd HH:mm:ss'}}</p>
+                <textarea class="desc" >
+                {{todo.desc}}
+                </textarea>
+            </div>
+            <div class="commit" ng-click="commitDatail()">确认</div>
+            <div class="revoke" ng-click="closeDetail()">取消</div>
         </div>
-        <div class="commit" ng-click="commitDatail()">确认</div>
-        <div class="revoke" ng-click="closeDetail()">取消</div>
-    </div>
+        </div>
     </div>
 </body>
 </html>
