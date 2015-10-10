@@ -20,16 +20,16 @@
     <h1 class="title">TODO</h1>
     <div class="todo_board" ng-controller="todoBoardCtrl" >
         <div class="todo_input" ng-Keypress="sendData($event)" >
-            <input type="text" placeholder="准备做..." ng-model="todoInput">
+            <input type="text" placeholder="准备做..." ng-model="todoTitle">
         </div>
         <ul class="todo_list" ng-controller="todoListCtrl">
             <li ng-repeat="todo in todos">
                 <div class="todo" ng-class="{'done':todo.isDone}">
-                <i class="status {{todo.status}}" ng-click="tickStatus()"></i>
+                <i class="status {{todo.status}}" ng-click="tickStatus(todo)"></i>
                     <p class="tit" ng-click="popDetail(todo)">{{todo.title}}
                         <small class="time">{{ todo.time | date: 'yyyy-MM-dd HH:mm:ss'}}</small>
                     </p>
-                    <div class="btn_del" ></div>
+                    <div class="btn_del" ng-click="delTodo(todo)"></div>
                 </div>
             </li>
         </ul>
@@ -38,11 +38,10 @@
             <span class="close" ng-click="closeDetail()"></span>
             <div class="detail">
                 <p class="time">{{ todo.time | date: 'yyyy-MM-dd HH:mm:ss'}}</p>
-                <textarea class="desc" >
-                {{todo.desc}}
+                <textarea class="desc" ng-model="todo.desc" >
                 </textarea>
             </div>
-            <div class="commit" ng-click="commitDatail()">确认</div>
+            <div class="commit" ng-click="commitDatail(todo)">确认</div>
             <div class="revoke" ng-click="closeDetail()">取消</div>
         </div>
         </div>

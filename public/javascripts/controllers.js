@@ -15,13 +15,58 @@ var todoModule = angular.module('todo',[]).factory('todoService',function($rootS
 });
 
 
+todoModule.controller('todoBoardCtrl',function($scope,$http,$location){
+    $scope.todo = {};
+    // 发送
+    $scope.sendData = function($event){
+        if ($event.keyCode === 13){
+            $scope.todo.title = $scope.todoTitle;
 
-todoModule.controller('todoListCtrl',function($scope,$http,todoService){
+
+            $http.post('/todo/add',$scope.todo).success(function(){
+                $scope.todoTitle = '';
+                console.log($scope.todoTitle + " send successfully!");
+                $scope.$broadcast('addSuccess');
+            }).error(function() {
+                console.log($scope.todoTitle + " fail!");
+            });
+        }
+    }
+
+});
+
+
+todoModule.controller('todoListCtrl',function($scope,$http,todoService,$location){
     // 获取数据
     $http.get('/todos').success(function(data){
         $scope.todos = data;
     });
-    // 暴露函数
+    $scope.$on('addSuccess',function(){
+        $http.get('/todos').success(function(data){
+            $scope.todos = data;
+        });
+    });
+    // 勾选切换是否完成
+    $scope.tickStatus = function(todo){
+        var data = {
+            _id: todo._id,
+            isDone: !todo.isDone
+        };
+        $http.post('/todo/update',data).success(function(){
+            todo.isDone = !todo.isDone;
+            console.log(todo.title + ' update successfully!');
+        });
+    }
+    // 删除
+    $scope.delTodo = function(todo) {
+        console.log(todo);
+        $http.post('/todo/remove',todo).success(function(){
+            $http.get('/todos').success(function(data){
+                $scope.todos = data;
+            });
+            console.log(todo.title + 'delete successfully!');
+        });
+    }
     $scope.popDetail = function(todo){
         todoService.setTodo(todo);
         document.querySelectorAll('.mod_alert_layer')[0].style.display= "block";
@@ -31,14 +76,16 @@ todoModule.controller('todoListCtrl',function($scope,$http,todoService){
         document.querySelectorAll('.mod_alert_layer')[0].style.display= "none";
         document.querySelectorAll('.todo_detail_board')[0].classList.remove('fixed');
     }
-    $scope.tickStatus = function(){
-        this.todo.isDone = !this.todo.isDone;
-    }
 });
-todoModule.controller('todoDetailCtrl',function($scope,todoService){
+
+
+todoModule.controller('todoDetailCtrl',function($scope,$http,todoService){
+    var preDesc = '';
     $scope.todo = todoService.getTodo();
+
     $scope.$on('handleBroadcast', function() {
         $scope.todo = todoService.getTodo();
+        preDesc = $scope.todo.desc;
         console.log($scope.todo);
     });
     function close(){
@@ -48,17 +95,16 @@ todoModule.controller('todoDetailCtrl',function($scope,todoService){
         },300);
     }
     $scope.closeDetail = function(){
+        $scope.todo.desc = preDesc;
         close();
     }
-    $scope.commitDatail = function(){
-        close();
+    // 修改备注
+    $scope.commitDatail = function(todo){
+        $http.post('/todo/update',todo).success(function(){
+            close();
+            console.log( todo.desc+" successfully!");
+        });
     }
 });
-todoModule.controller('todoBoardCtrl',function($scope){
-    $scope.sendData = function($event){
-        if ($event.keyCode === 13){
-            alert($scope.todoInput + '发送成功！');
-        }
-    }
-});
+
 

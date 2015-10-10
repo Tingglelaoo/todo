@@ -36,11 +36,27 @@ var Schema = mongoose.Schema;
  */
 
 var todoSchema = new Schema({
-    isDone: Boolean,
-    status: String,
-    title: {type:String,default:'未命名标题',trim:true},
-    time: String,
-    desc: String
+    isDone: {
+        type: Boolean,
+        default: false
+    },
+    status: {
+        type: String,
+        default: 'easy'
+    },
+    title: {
+        type: String,
+        default: '未命名标题',
+        trim: true
+    },
+    time: {
+        type: String,
+        default: Date.now()
+    },
+    desc: {
+        type: String,
+        default: '在这里可以添加备注喔...'
+    }
 });
 
 
@@ -98,6 +114,39 @@ module.exports = function(app){
         todoModel.findOne({_id:_id}).exec(function(err,docs){
             if(err) return console.log(err);
             res.json(docs);
+        });
+    });
+
+
+    app.post('/todo/add',function(req,res){
+        var todo = new todoModel(req.body);
+        console.log(todo);
+        todo.save(function (err, docs) {
+            if(err) return console.log(err);
+            res.json({status: 'done'});
+        });
+    });
+
+    app.post('/todo/update',function(req,res){
+        console.log(req.body);
+        var data = req.body;
+        var q = todoModel.findOne({_id:data._id});
+        todoModel.update(q,{$set:data}).exec(function(err,docs){
+            if(err) return console.log(err);
+            console.log(docs);
+            res.json({status:'done'});
         })
+    });
+
+    app.post('/todo/remove',function(req,res){
+        var data = req.body;
+        todoModel.findOne({_id:data._id}).exec(function(err,docs){
+            if(err) return console.log(err);
+            console.log(docs);
+            docs.remove(function(err){
+                 if(err) return console.log(err);
+                res.json({status:'done'});
+            });
+        });
     });
 }
