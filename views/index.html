@@ -35,15 +35,27 @@
         </ul>
         <div class="mod_alert_layer">
             <div class="todo_detail_board" ng-controller="todoDetailCtrl">
-            <span class="close" ng-click="closeDetail()"></span>
-            <div class="detail">
-                <p class="time">{{ todo.time | date: 'yyyy-MM-dd HH:mm:ss'}}</p>
-                <textarea class="desc" ng-model="todo.desc" >
-                </textarea>
+                <span class="close" ng-click="closeDetail()"></span>
+                <div class="detail">
+                    <div class="status_set">
+                        <label class="hell" ng-class="{'selected':todo.status==='hell'}">
+                            <input type="radio" name="status" ng-model="todo.status" value="hell">
+                        </label>
+                        <label class="hard" ng-class="{'selected':todo.status==='hard'}">
+                            <input type="radio" name="status" ng-model="todo.status" value="hard">
+                        </label>
+                        <label class="easy" ng-class="{'selected':todo.status==='easy'}">
+                            <input type="radio" name="status" ng-model="todo.status"
+                            value="easy">
+                        </label>
+                    </div>
+                    <p class="time">{{ todo.time | date: 'yyyy-MM-dd HH:mm:ss'}}</p>
+                    <textarea class="desc" ng-model="todo.desc" >
+                    </textarea>
+                </div>
+                <div class="commit" ng-click="commitDatail(todo)">确认</div>
+                <div class="revoke" ng-click="closeDetail()">取消</div>
             </div>
-            <div class="commit" ng-click="commitDatail(todo)">确认</div>
-            <div class="revoke" ng-click="closeDetail()">取消</div>
-        </div>
         </div>
     </div>
 </body>

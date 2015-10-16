@@ -82,12 +82,13 @@ todoModule.controller('todoListCtrl',function($scope,$http,todoService,$location
 todoModule.controller('todoDetailCtrl',function($scope,$http,todoService){
     var preDesc = '';
     $scope.todo = todoService.getTodo();
-
     $scope.$on('handleBroadcast', function() {
         $scope.todo = todoService.getTodo();
         preDesc = $scope.todo.desc;
+        preStatus = $scope.todo.status;
         console.log($scope.todo);
     });
+
     function close(){
         document.querySelectorAll('.todo_detail_board')[0].classList.remove('fixed');
         setTimeout(function(){
@@ -96,9 +97,10 @@ todoModule.controller('todoDetailCtrl',function($scope,$http,todoService){
     }
     $scope.closeDetail = function(){
         $scope.todo.desc = preDesc;
+        $scope.todo.status = preStatus;
         close();
     }
-    // 修改备注
+    // 修改提交
     $scope.commitDatail = function(todo){
         $http.post('/todo/update',todo).success(function(){
             close();

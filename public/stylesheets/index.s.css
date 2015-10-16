@@ -28,7 +28,7 @@
   right: 0;
   bottom: 0; }
 
-.todo .status:after {
+.todo .status:after, .todo_detail_board .detail .status_set .hell:after, .todo_detail_board .detail .status_set .hard:after, .todo_detail_board .detail .status_set .easy:after {
   content: '';
   display: block;
   border: 1px solid #ddd;
@@ -44,7 +44,7 @@
     -webkit-transform: scaleY(0.5);
     -webkit-transform-origin: 50% 100%; }
 
-  .todo .status:after {
+  .todo .status:after, .todo_detail_board .detail .status_set .hell:after, .todo_detail_board .detail .status_set .hard:after, .todo_detail_board .detail .status_set .easy:after {
     -webkit-transform: scale(0.5);
     -webkit-transform-origin: 0% 0%;
     bottom: -100%;
@@ -54,7 +54,7 @@
   .todo:after {
     -webkit-transform: scaleY(0.333); }
 
-  .todo .status:after {
+  .todo .status:after, .todo_detail_board .detail .status_set .hell:after, .todo_detail_board .detail .status_set .hard:after, .todo_detail_board .detail .status_set .easy:after {
     -webkit-transform: scale(0.333);
     -webkit-transform-origin: 0% 0%;
     bottom: -200%;
@@ -64,7 +64,7 @@
   .todo:after {
     -webkit-transform: scaleY(0.666); }
 
-  .todo .status:after {
+  .todo .status:after, .todo_detail_board .detail .status_set .hell:after, .todo_detail_board .detail .status_set .hard:after, .todo_detail_board .detail .status_set .easy:after {
     -webkit-transform: scale(0.666);
     bottom: -50%;
     right: -50%; } }
@@ -229,6 +229,7 @@ body {
   .todo_detail_board .detail {
     color: #999; }
     .todo_detail_board .detail .time {
+      float: right;
       font-size: 10px;
       color: #80adf4;
       margin-bottom: 5px; }
@@ -246,3 +247,25 @@ body {
       border-left: none;
       border-right: none;
       color: #999; }
+    .todo_detail_board .detail .status_set {
+      float: left; }
+      .todo_detail_board .detail .status_set .hell, .todo_detail_board .detail .status_set .hard, .todo_detail_board .detail .status_set .easy {
+        position: relative;
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        margin-right: 15px; }
+        .todo_detail_board .detail .status_set .hell input, .todo_detail_board .detail .status_set .hard input, .todo_detail_board .detail .status_set .easy input {
+          display: none; }
+      .todo_detail_board .detail .status_set .hell:after {
+        border-color: #e4393c; }
+      .todo_detail_board .detail .status_set .hell.selected {
+        background-color: #e4393c; }
+      .todo_detail_board .detail .status_set .hard:after {
+        border-color: #fcc45e; }
+      .todo_detail_board .detail .status_set .hard.selected {
+        background-color: #fcc45e; }
+      .todo_detail_board .detail .status_set .easy:after {
+        border-color: #9cd44c; }
+      .todo_detail_board .detail .status_set .easy.selected {
+        background-color: #9cd44c; }
