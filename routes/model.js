@@ -68,31 +68,6 @@ var todoSchema = new Schema({
 var todoModel  = mongoose.model('todoModel',todoSchema);
 
 
-// todoModel.remove({},function(err){
-//     if (err) return console.log(err);
-//     console.log('remove all');
-// });
-
-// todoModel.create([{isDone: false,status:'hell',title:'hell world',time: moment().valueOf(),desc:'this is the first data'},{isDone: true,status:'easy',title:'hell world2',time:moment().valueOf(),desc:'this is the second data'}],function(err){
-//     if (err) return console.log(err);
-//     console.log('create');
-// });
-
-// todoModel.find({},function(err,docs){
-//     if (err) return console.log(err);
-//     console.log(docs);
-// });
-
-/**
- * Methods 为Schema 创建方法，绑定在Schem下，给实例使用
- */
-
-
-/**
- * Statics 静态方法，在model层就能使用，绑定在Schema下
- */
-
-
 module.exports = function(app){
     /* GET home page. */
     app.get('/', function(req, res) {
@@ -101,6 +76,7 @@ module.exports = function(app){
         res.render('index');
     });
 
+    // 获取全部todo
     app.get('/todos', function(req, res) {
         todoModel.find().exec(function(err,data){
            if (err) return console.log(err);
@@ -108,7 +84,7 @@ module.exports = function(app){
         });
     });
 
-
+    // 根据id 获取单个 todo
     app.get('/todo/:_id',function(req,res){
         var _id = req.params._id;
         todoModel.findOne({_id:_id}).exec(function(err,docs){
@@ -117,7 +93,7 @@ module.exports = function(app){
         });
     });
 
-
+    // 增
     app.post('/todo/add',function(req,res){
         var todo = new todoModel(req.body);
         console.log(todo);
@@ -127,6 +103,7 @@ module.exports = function(app){
         });
     });
 
+    // 改
     app.post('/todo/update',function(req,res){
         console.log(req.body);
         var data = req.body;
@@ -138,6 +115,7 @@ module.exports = function(app){
         })
     });
 
+    // 删
     app.post('/todo/remove',function(req,res){
         var data = req.body;
         todoModel.findOne({_id:data._id}).exec(function(err,docs){
