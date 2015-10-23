@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" ng-app="todo">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport"content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;"/>
+    <meta name="format-detection"content="telephone=no"/>
+
+    <!--S 本地样式，开发请删除-->
+    <link rel="stylesheet"href="./stylesheets/base.s.css"/>
+    <link rel="stylesheet"href="./stylesheets/index.s.css"/>
+    <script type="text/javascript" src="./javascripts/angular.min.js"></script>
+    <script type="text/javascript" src="./javascripts/angular-resource.min.js"></script>
+    <script type="text/javascript" src="./javascripts/angular-messages.min.js"></script>
+    <script type="text/javascript" src="./javascripts/controllers.js"></script>
+    <!--E 本地样式-->
+
+    <title>TODO</title>
+</head>
+<body>
+    <h1 class="title">TODO</h1>
+    <div class="todo_board" ng-controller="todoBoardCtrl" >
+        <div class="todo_input" ng-Keypress="sendData($event)" >
+            <input type="text" placeholder="准备做..." ng-model="todoTitle">
+        </div>
+        <ul class="todo_list" ng-controller="todoListCtrl">
+            <li ng-repeat="todo in todos">
+                <div class="todo" ng-class="{'done':todo.isDone}">
+                <i class="status {{todo.status}}" ng-click="tickStatus(todo)"></i>
+                    <p class="tit" ng-click="popDetail(todo)">{{todo.title}}
+                        <small class="time">{{ todo.time | date: 'yyyy-MM-dd HH:mm:ss'}}</small>
+                    </p>
+                    <div class="btn_del" ng-click="delTodo(todo)"></div>
+                </div>
+            </li>
+        </ul>
+        <div class="mod_alert_layer">
+            <div class="todo_detail_board" ng-controller="todoDetailCtrl">
+                <span class="close" ng-click="closeDetail()"></span>
+                <div class="detail">
+                    <div class="status_set">
+                        <label class="hell" ng-class="{'selected':todo.status==='hell'}">
+                            <input type="radio" name="status" ng-model="todo.status" value="hell">
+                        </label>
+                        <label class="hard" ng-class="{'selected':todo.status==='hard'}">
+                            <input type="radio" name="status" ng-model="todo.status" value="hard">
+                        </label>
+                        <label class="easy" ng-class="{'selected':todo.status==='easy'}">
+                            <input type="radio" name="status" ng-model="todo.status"
+                            value="easy">
+                        </label>
+                    </div>
+                    <p class="time">{{ todo.time | date: 'yyyy-MM-dd HH:mm:ss'}}</p>
+                    <textarea class="desc" ng-model="todo.desc" >
+                    </textarea>
+                </div>
+                <div class="commit" ng-click="commitDatail(todo)">确认</div>
+                <div class="revoke" ng-click="closeDetail()">取消</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
