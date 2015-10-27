@@ -1,4 +1,5 @@
 var moment = require('moment');
+var crypto = require('crypto');
 // 数据库
 var mongoose = require('mongoose'),
     dbname = 'mongodb://localhost/todo';
@@ -36,6 +37,10 @@ var Schema = mongoose.Schema;
  */
 
 var todoSchema = new Schema({
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'todoModel'
+    },
     isDone: {
         type: Boolean,
         default: false
@@ -59,13 +64,43 @@ var todoSchema = new Schema({
     }
 });
 
+/*
+  user Schema
+ */
+
+var userSchema = new Schema({
+    username: {
+        type : String,
+        trim : true,
+        default:''
+    },
+    password: {
+        type: String,
+        trim: true,
+        default:''
+    }
+});
 
 // model: 处理数据
 /*
   todo Model
  */
-
 var todoModel  = mongoose.model('todoModel',todoSchema);
+
+/*
+  user Model
+ */
+var userModel  = mongoose.model('userModel',userSchema);
+
+
+// 加密密码
+function encryptPassword(user) {
+    var password = user.password;
+    if (!password) return '';
+    var hashed_password = crypto.createHash('sha1').update(password).digest('hex');
+    user.password = hashed_password;
+    return user;
+}
 
 
 module.exports = function(app){
@@ -76,11 +111,14 @@ module.exports = function(app){
         res.render('index');
     });
 
+    /* todos */
     // 获取全部todo
-    app.get('/todos', function(req, res) {
-        todoModel.find().exec(function(err,data){
+    app.get('/todos/:userId', function(req, res) {
+        var userId = req.params.userId;
+        todoModel.find({userId:userId}).exec(function(err,data){
            if (err) return console.log(err);
            res.json(data);
+           console.log(data);
         });
     });
 
@@ -125,6 +163,47 @@ module.exports = function(app){
                  if(err) return console.log(err);
                 res.json({status:'done'});
             });
+        });
+    });
+
+    /* users */
+
+    // 注册
+    app.post('/signUp',function(req,res){
+        var user = new userModel(req.body);
+        user = encryptPassword(user);
+        user.save(function (err, docs) {
+            if(err) return console.log(err);
+            res.json(docs);
+        });
+    });
+
+    // 登录
+    app.post('/logIn',function(req,res){
+        var user = req.body;
+        user = encryptPassword(user);
+        userModel.findOne(user).exec(function(err,docs){
+            if(err) return console.log(err);
+            if( docs == null ) {
+                res.sendStatus(404);
+            }
+            else {
+                res.json(docs);
+            }
+        });
+    });
+
+    // 检测
+    app.get('/checkUsername/:username',function(req,res){
+        var username = req.params.username;
+        userModel.findOne({ username : username }).exec(function(err,docs){
+            if(err) return console.log(err);
+            if( docs == null ) {
+                res.sendStatus(404);
+            }
+            else {
+                res.json(docs);
+            }
         });
     });
 }

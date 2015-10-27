@@ -8,11 +8,28 @@
   overflow: hidden;
   text-overflow: ellipsis; }
 
+.btns {
+  display: box;
+  display: -ms-box;
+  display: -webkit-box;
+  display: flex;
+  display: -ms-flexbox;
+  display: -webkit-flex; }
+
+.btns .btn {
+  display: block;
+  flex: 1;
+  -ms-flex: 1;
+  -webkit-flex: 1;
+  box-flex: 1;
+  -ms-box-flex: 1;
+  -webkit-box-flex: 1; }
+
 .todo_input input, .todo_detail_board .detail .desc {
   -webkit-box-sizing: border-box;
   box-sizing: border-box; }
 
-.todo_input input {
+.todo_input input, .login_form .input input {
   border: none;
   background: none;
   -webkit-appearance: none;
@@ -76,13 +93,13 @@ body {
   color: #e4393c;
   text-align: center; }
 
-/* todo board
------------------ */
-.todo_board, .todo_detail_board {
+.todo_board, .todo_detail_board, .login_board {
   background-color: #fff;
   -webkit-box-shadow: 1px 4px 5px rgba(0, 0, 0, 0.1);
   box-shadow: 1px 4px 5px rgba(0, 0, 0, 0.1); }
 
+/* todo board
+----------------- */
 .todo_list {
   padding: 0 10px;
   overflow: hidden; }
@@ -269,3 +286,57 @@ body {
         border-color: #9cd44c; }
       .todo_detail_board .detail .status_set .easy.selected {
         background-color: #9cd44c; }
+
+/* login
+------------------ */
+.login_board {
+  position: relative;
+  max-width: 320px;
+  margin: 0 auto;
+  -webkit-border-radius: 10px;
+  border-radius: 10px; }
+  .login_board:after {
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    margin-left: -15px;
+    content: '';
+    border-style: solid;
+    border-width: 15px;
+    border-color: transparent transparent #fff transparent; }
+
+.login_form {
+  padding: 30px 50px 15px 50px; }
+  .login_form .input {
+    position: relative;
+    margin-bottom: 15px;
+    border-bottom: 1px dotted #ccc;
+    -webkit-border-radius: 4px;
+    border-radius: 4px; }
+    .login_form .input input {
+      width: 100%;
+      height: 30px;
+      line-height: 30px;
+      padding: 0 20px; }
+
+.btns .btn {
+  height: 45px;
+  line-height: 45px;
+  text-align: center;
+  margin: 5px 10px; }
+  .btns .btn.bg_1 {
+    color: #9cd44c; }
+  .btns .btn.bg_2 {
+    color: #80adf4; }
+  .btns .btn.disabled {
+    color: #999; }
+
+.error {
+  margin: 0 10px;
+  display: block;
+  font-size: 14px;
+  text-align: center;
+  color: #e4393c; }
+  .error p:before {
+    content: '!!';
+    margin: 0 8px; }

@@ -1,21 +1,23 @@
 <!DOCTYPE HTML>
-<html lang="zh-CN" ng-app="user">
+<html lang="zh-CN" ng-app="todo">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;"/>
-  <meta name="format-detection" content="telephone=no"/>
+    <meta charset="utf-8"/>
+    <meta name="viewport"content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;"/>
+    <meta name="format-detection"content="telephone=no"/>
 
-  <!--S 线上样式页面片，开发请直接取消注释引用-->
-  <!-- #include virtual="/sinclude/cssi/..." -->
-  <!--E 线上样式页面片-->
+    <!--S 本地样式，开发请删除-->
+     <link rel="shortcut icon" href="./images/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet"href="./stylesheets/base.s.css"/>
+    <link rel="stylesheet"href="./stylesheets/index.s.css"/>
+    <script src="./javascripts/angular.min.js"></script>
+    <script src="./javascripts/angular-ui-router.min.js"></script>
+    <script src="./javascripts/angular-messages.min.js"></script>
+    <script src="./javascripts/controllers.js"></script>
+    <!--E 本地样式-->
 
-  <!--S 本地样式，开发请删除-->
-  <link rel="stylesheet" href="/fd/..." />
-  <!--E 本地样式-->
-
-  <title></title>
+    <title>TODO</title>
 </head>
 <body>
-
+    <div ui-view></div>
 </body>
 </html>

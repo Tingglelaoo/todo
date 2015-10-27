@@ -1,5 +1,40 @@
-var todoModule = angular.module('todo', []).factory('todoService', function($rootScope, $http) {
+var todoModule = angular.module('todo', ['ui.router', 'ngMessages']);
+// 视图路由
+
+todoModule.config(function($urlRouterProvider, $stateProvider) {
+    $urlRouterProvider.otherwise('/login');
+    $stateProvider
+        .state('login', {
+            url: '/login',
+            templateUrl: 'page-login.html'
+        })
+        .state('todo', {
+            url: '/todo',
+            templateUrl: 'page-todo.html'
+        })
+});
+
+
+// todoModule.config(function($routeProvider){
+//    $routeProvider
+//    .when('/',{
+//      templateUrl:'page-login.html',
+//      controller: 'loginCtrl'
+//    })
+//    .when('/todo',{
+//     templateUrl:'page-todo.html',
+//     controller: 'todoBoardCtrl'
+//    })
+//    .otherwise({
+//     redirectTo:'/'
+//    });
+// });
+
+
+// 创建服务
+todoModule.factory('todoService', function($rootScope, $http) {
     var todo = {};
+    var user = JSON.parse(localStorage.todoCurUser) || {};
     var readyForGetTodo = function() {
         $rootScope.$broadcast('readyForGetTodo');
     };
@@ -8,6 +43,13 @@ var todoModule = angular.module('todo', []).factory('todoService', function($roo
     }
     return {
         // 传递数据
+        getUser: function(){
+            return this.user;
+        },
+        setUser:function(user){
+            this.user = user;
+            localStorage.todoCurUser = JSON.stringify(user);
+        },
         getTodo: function() {
             return this.todo;
         },
@@ -17,7 +59,8 @@ var todoModule = angular.module('todo', []).factory('todoService', function($roo
         },
         // 查
         getAlltodos: function(thisScope) {
-            $http.get('/todos').success(function(data) {
+            var curUser = JSON.parse(localStorage.todoCurUser);
+            $http.get('/todos/'+ curUser._id ).success(function(data) {
                 thisScope.todos = data;
             });
         },
@@ -60,13 +103,15 @@ var todoModule = angular.module('todo', []).factory('todoService', function($roo
     };
 });
 
-
 todoModule.controller('todoBoardCtrl', function($scope, todoService) {
+    $scope.user = todoService.getUser();
     $scope.todo = {};
     // 回车发送事件
     $scope.sendData = function($event) {
         if ($event.keyCode === 13) {
+            $scope.todo.userId = $scope.user._id;
             $scope.todo.title = $scope.todoTitle;
+            console.log($scope.todo);
             todoService.addTodo($scope.todo, function() {
                 $scope.todoTitle = '';
             });
@@ -89,18 +134,18 @@ todoModule.controller('todoListCtrl', function($scope, todoService) {
                 _id: todo._id,
                 isDone: !todo.isDone
             };
-            todoService.updateTodo(data, function(){
+            todoService.updateTodo(data, function() {
                 todo.isDone = !todo.isDone;
             });
         }
-    // 删除todo
+        // 删除todo
     $scope.delTodo = function(todo) {
-        console.log(todo);
-        todoService.removeTodo(todo,function(){
-            todoService.getAlltodos($scope);
-        });
-    }
-    // 打开弹窗并且发送当前todo
+            console.log(todo);
+            todoService.removeTodo(todo, function() {
+                todoService.getAlltodos($scope);
+            });
+        }
+        // 打开弹窗并且发送当前todo
     $scope.popDetail = function(todo) {
         todoService.setTodo(todo);
         open();
@@ -128,9 +173,9 @@ todoModule.controller('todoDetailCtrl', function($scope, todoService) {
             $scope.todo.status = preTodo.status;
             close();
         }
-    // 确认修改并关闭弹窗
+        // 确认修改并关闭弹窗
     $scope.commitDatail = function(todo) {
-        todoService.updateTodo(todo,function(){
+        todoService.updateTodo(todo, function() {
             close();
         });
 
@@ -152,3 +197,73 @@ function close() {
         document.querySelectorAll('.mod_alert_layer')[0].style.display = "none";
     }, 300);
 }
+
+
+// Users
+todoModule.controller('logSignCtrl', function($scope, $http, $location, todoService) {
+    $scope.canNotSign = false;
+    var user = {};
+    $scope.logIn = function() {
+        if ( $scope.canNotSign ) {
+            user = $scope.user;
+            console.log(user);
+            $http.post('/logIn',user).success(function(data) {
+                console.log('User: ' + user.username + ' Log In ');
+                user = data;
+                todoService.setUser(user);
+                $location.path('/todo');
+            }).error(function() {
+                $scope.res = "WRONG Password";
+            });
+        }
+    }
+    $scope.signUp = function() {
+        if ( !$scope.canNotSign ) {
+            user = $scope.user;
+            $http.post('/signUp', user).success(function(data) {
+                console.log('User: ' + user.username + ' Sign Up ');
+                user = data;
+                todoService.setUser(user);
+                $location.path('/todo');
+            });
+        }
+    }
+
+});
+
+// 自定义 ng-messages
+todoModule.directive('userValidator', ['$http', function($http) {
+    return {
+        require: 'ngModel',
+        link: function($scope, element, attrs, ngModel) {
+            var apiUrl = attrs.userValidator;
+
+            function setLoading(bool) {
+                ngModel.$setValidity('checkNameLoading', !bool);
+            }
+
+            function setAvailable(bool) {
+                ngModel.$setValidity('checkNameError', !bool);
+            }
+            ngModel.$parsers.push(function(value) {
+                if (!value || value.length == 0) {
+                    return false;
+                }
+                setLoading(true);
+                setAvailable(false);
+                $http.get(apiUrl + value).
+                    success(function() {
+                        setLoading(false);
+                        setAvailable(true);
+                        $scope.canNotSign = true;
+                    })
+                    .error(function() {
+                        setLoading(false);
+                        setAvailable(false);
+                        $scope.canNotSign = false;
+                    });
+                return value;
+            });
+        }
+    }
+}]);
