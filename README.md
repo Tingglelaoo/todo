@@ -20,11 +20,13 @@ TODO 是学习MEAN（MongoDB、Express、Angular、Node）技术的项目小实�
 1. `git clone` 这个项目。
 2. 在**MEAN**环境下，进入到项目目录下，建立`/data`文件夹作为数据存储的路径。
 3. 先双击`mongodb.bat`来启动数据库。
-> 亦可通过命令行输入以下命令来启动数据库
+4. 用命令行`npm start`来启动项目，即可通过 `localhost:3000`进行访问。
+
+
+> 亦可通过命令行输入以下命令来启动数据库,即`mongodb.bat`的内容。
 ```
 start mongod --dbpath "f://my work//todo//todo//data"
 ```
-4. 用命令行`npm start`来启动项目，即可通过 `localhost:3000`进行访问。
 
 #许可
 MIT
