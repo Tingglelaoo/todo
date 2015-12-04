@@ -8,6 +8,7 @@ TODO 是学习MEAN（MongoDB、Express、Angular、Node）技术的项目小实�
 2. 通过回车输入，增加单条todo
 3. 通过删除按钮，删除单条todo
 4. 点击todo列表子项，进行对该todo的修改
+
 > **目前可修改点仅包括**：
  - 备注
  - 优先级 （红、黄、绿 重要性依次降低）
