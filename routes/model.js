@@ -98,6 +98,7 @@ function encryptPassword(user) {
     var password = user.password;
     if (!password) return '';
     var hashed_password = crypto.createHash('sha1').update(password).digest('hex');
+    console.log(hashed_password);
     user.password = hashed_password;
     return user;
 }

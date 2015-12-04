@@ -33,8 +33,9 @@ todoModule.config(function($urlRouterProvider, $stateProvider) {
 
 // 创建服务
 todoModule.factory('todoService', function($rootScope, $http) {
-    var todo = {};
-    var user = JSON.parse(localStorage.todoCurUser) || {};
+    $rootScope.todo = {};
+    $rootScope.user = {};
+    $rootScope.curUser = localStorage.todoCurUser ? JSON.parse(localStorage.todoCurUser) : {};
     var readyForGetTodo = function() {
         $rootScope.$broadcast('readyForGetTodo');
     };
@@ -44,22 +45,25 @@ todoModule.factory('todoService', function($rootScope, $http) {
     return {
         // 传递数据
         getUser: function(){
-            return this.user;
+            return $rootScope.user;
+        },
+        getCurUser: function(){
+            return $rootScope.curUser;
         },
         setUser:function(user){
-            this.user = user;
+            $rootScope.user = user;
             localStorage.todoCurUser = JSON.stringify(user);
         },
         getTodo: function() {
-            return this.todo;
+            return $rootScope.todo;
         },
         setTodo: function(todo) {
-            this.todo = todo;
+            $rootScope.todo = todo;
             readyForGetTodo();
         },
         // 查
         getAlltodos: function(thisScope) {
-            var curUser = JSON.parse(localStorage.todoCurUser);
+            var curUser = $rootScope.curUser;
             $http.get('/todos/'+ curUser._id ).success(function(data) {
                 thisScope.todos = data;
             });
@@ -104,12 +108,11 @@ todoModule.factory('todoService', function($rootScope, $http) {
 });
 
 todoModule.controller('todoBoardCtrl', function($scope, todoService) {
-    $scope.user = todoService.getUser();
     $scope.todo = {};
     // 回车发送事件
     $scope.sendData = function($event) {
         if ($event.keyCode === 13) {
-            $scope.todo.userId = $scope.user._id;
+            $scope.todo.userId = todoService.getCurUser()._id;
             $scope.todo.title = $scope.todoTitle;
             console.log($scope.todo);
             todoService.addTodo($scope.todo, function() {
@@ -211,7 +214,9 @@ todoModule.controller('logSignCtrl', function($scope, $http, $location, todoServ
                 console.log('User: ' + user.username + ' Log In ');
                 user = data;
                 todoService.setUser(user);
+                user = {};
                 $location.path('/todo');
+
             }).error(function() {
                 $scope.res = "WRONG Password";
             });
@@ -224,6 +229,7 @@ todoModule.controller('logSignCtrl', function($scope, $http, $location, todoServ
                 console.log('User: ' + user.username + ' Sign Up ');
                 user = data;
                 todoService.setUser(user);
+                user = {};
                 $location.path('/todo');
             });
         }

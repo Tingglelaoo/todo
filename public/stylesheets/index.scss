@@ -1,0 +1,318 @@
+@charset "utf-8";
+/**
+ * @desc TODO
+ * @author litingting6@jd.com
+ * @date 20150921
+ */
+@import 'sass/function';
+@import 'sass/mod_border';
+body {
+    background: #f2f2f2;
+}
+$color_yellow: #fcc45e;
+$color_green: #9cd44c;
+$color_blue: #80adf4;
+.title {
+    font-size: 48px;
+    color: $color_red;
+    text-align: center;
+}
+%board {
+    background-color: #fff;
+    -webkit-box-shadow: 1px 4px 5px rgba(0,0,0,.1);
+    box-shadow: 1px 4px 5px rgba(0,0,0,.1);
+}
+
+/* todo board
+----------------- */
+.todo_board,.todo_detail_board { @extend %board; }
+.todo_list {
+    padding: 0 10px;
+    overflow: hidden;
+    li:last-child .todo:after {
+        display: none;
+    }
+}
+.todo_input {
+    position: relative;
+    padding: 20px;
+    margin-bottom: 15px;
+    &:after { @extend %border-btm-1pt;}
+    input {
+        @extend %border_box;
+        @extend %input_clear;
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+        padding: 20px;
+        color: #333;
+        border: 1px solid #ddd;
+    }
+}
+.todo {
+    position: relative;
+    padding: 0px 35px 0 25px;
+    line-height: 50px;
+    &:after {
+        border-color: #f2f2f2;
+        @extend %border-btm-1pt;
+    }
+    &.done {
+        .status:before {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            line-height: 1;
+            text-align: center;
+            content: '\2714';
+
+        }
+        .tit {
+            color: #ddd;
+            text-decoration: line-through;
+            .time {
+                color: inherit;
+            }
+        }
+    }
+    .status {
+        position: absolute;
+        top: 50%; left: 5px;
+        -webkit-transform:translate(0,-50%);
+        transform:translate(0,-50%);
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        &:after { @extend %border-1pt;}
+        &.hell {
+            color: $color_red;
+            &:after {
+                border-color: $color_red;
+            }
+        }
+        &.hard {
+            color: $color_yellow;
+            &:after {
+                border-color: $color_yellow;
+            }
+        }
+        &.easy {
+            color: $color_green;
+            &:after {
+                border-color: $color_green;
+            }
+        }
+    }
+    .tit {
+        color: #333;
+        @extend %text_oneline;
+        .time {
+            color: $color_blue;
+            float: right;
+        }
+    }
+    .btn_del {
+        // display: none;
+        position: absolute;
+        top: 50%;
+        right: 0;
+        -webkit-transform: translate(0,-50%);
+        transform: translate(0,-50%);
+        width: 25px;
+        height: 25px;
+        &:before {
+            position: absolute;
+            content: '\2715';
+            top: 50%;
+            left: 50%;
+            -webkit-transform: translate(-50%,-50%);
+            transform: translate(-50%,-50%);
+            width: 25px;
+            height: 25px;
+            line-height: 25px;
+            color:  rgba($color_red,.9);
+            font-size: 20px;
+            text-align: center;
+        }
+    }
+}
+/* todo layer
+------------------ */
+.mod_alert_layer {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,.5);
+    z-index: 80;
+    &.show {
+        display: block;
+    }
+}
+.todo_detail_board {
+    -webkit-transition:all .5s ease;
+    transition:all .5s ease;
+    padding: 10px;
+    position: fixed;
+    top: -100%;
+    left: 50%;
+    -webkit-transform: translate(-50%,-50%);
+        transform: translate(-50%,-50%);
+    width: 80%;
+    min-height: 240px;
+
+    &.fixed {
+        top: 50%;
+        z-index: 80;
+    }
+    .close {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        width: 20px;
+        height: 20px;
+        &:before {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -webkit-transform: translate(-50%,-50%);
+            transform: translate(-50%,-50%);
+            content: '\2716';
+            color: #fff;
+            width: 20px;
+            height: 20px;
+            font-size: 15px;
+            line-height: 20px;
+            text-align: center;
+            background-color: $color_red;
+            @include radius(20px);
+
+        }
+    }
+    .commit {
+        float: right;
+        margin: 10px;
+        color: $color_red;
+    }
+    .revoke {
+        float: right;
+        margin: 10px;
+        color: $color_green;
+    }
+    .detail {
+        color: #999;
+        .time {
+            float: right;
+            font-size: 10px;
+            color: $color_blue;
+            margin-bottom: 5px;
+        }
+        .desc {
+            @extend %border_box;
+            width: 100%;
+            padding: 10px;
+            max-height: 200px;
+        }
+        textarea {
+            resize: none;
+            width: 100%;
+            height: 180px;
+            overflow: hidden;
+            border-top: none;
+            border-bottom: 1px dotted #999;
+            border-left: none;
+            border-right: none;
+            color: #999;
+        }
+
+        .status_set {
+            float: left;
+            %icon_label {
+                input {display:none;}
+                position: relative;
+                display: inline-block;
+                width: 15px;
+                height: 15px;
+                margin-right: 15px;
+                &:after {
+                    @extend %border-1pt;
+                }
+            }
+            @mixin icon_label($borColor){
+                @extend %icon_label;
+                &:after { border-color: $borColor;}
+                &.selected { background-color: $borColor;}
+            }
+            .hell { @include icon_label($color_red);}
+            .hard { @include icon_label($color_yellow);}
+            .easy { @include icon_label($color_green);}
+        }
+    }
+}
+
+/* login
+------------------ */
+
+.login_board {
+    @extend %board;
+    position: relative;
+    max-width: 320px;
+    margin: 0 auto;
+    @include radius(10px);
+    &:after {
+        position: absolute;
+        top: -25px;
+        left: 50%;
+        margin-left: -15px;
+        content: '';
+        border-style: solid;
+        border-width: 15px;
+        border-color: transparent transparent #fff transparent;
+    }
+}
+.login_form {
+    padding: 30px 50px 15px 50px;
+    .input {
+        position: relative;
+        margin-bottom: 15px;
+        border-bottom: 1px dotted #ccc;
+        @include radius(4px);
+        input {
+            width: 100%;
+            height: 30px;
+            line-height: 30px;
+            padding: 0 20px;
+            @extend %input_clear;
+        }
+
+    }
+}
+
+.btns {
+    @extend %box;
+    .btn {
+        @extend %flex;
+        height: 45px;
+        line-height: 45px;
+        text-align: center;
+        margin: 5px 10px;
+        &.bg_1 { color: $color_green; }
+        &.bg_2 { color:  $color_blue; }
+        &.disabled { color: #999;}
+    }
+}
+
+.error {
+    margin: 0 10px;
+    display: block;
+    font-size: 14px;
+    text-align: center;
+    color: $color_red;
+    p:before {
+        content: '!!';
+        margin: 0 8px;
+    }
+}
